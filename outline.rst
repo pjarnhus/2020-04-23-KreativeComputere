@@ -55,26 +55,21 @@ Del 1
 * Hvis den ikke er god nok endnu, så kan vi blive ved med at arbejde med den - give den flere eksempler og justerer hvordan den lærer
 * På et tidspunkt er den god nok og så kan vi gemme modellen
 * Nu har vi et stykke kode, der indeholder alle de erfaringer, modellen har gjort sig
+* Det er med andre ord et stykke kode, der er i stand til at trække de relevante informationer ud fra billedet og omdanne det til et gæt på, hvad der er i billedet
 * Det kan vi så slippe løs sammen med resten af vores kode, og nu har vi et program, der kan gøre noget, som vi ikke selv har programmet den til
 * Det er sådan, at vi bygger machine learning modeller til dagligt - i hvert på et overordnet niveau
 * Men nu hedder det her foredrag jo kreative computere, og det at sige om et billede indeholder en bjørn eller en tiger er ikke just kreativt
-* For at blive kreative skal vi bruge en generativ model, som er en speciel måde at anvende en machine learning model på
+* I de næste to dele af foredraget kigger vi på, hvordan vi kan manipulere sådan nogle modeller som dem her til at skabe billeder eller tekst, der fremstår som originale værker
 * Inden da tager vi dog lige en fem minutters pause
 
 Del 2
 -----
 * Nu talte vi i første del om, hvordan man kunne bygge en model, der kunne genkende en tiger
-* Samtidig sagde vi, at det ikke var nok til at lave en generativ model
-* Faktisk er en generativ model, som ofte skaber noget ud af ingenting, sværere at lave end en der bare skal fortælle, hvad der er på et billede
-* Det har simpelthen noget at gøre med, hvor meget den skal tage højde for
-* Den model vi lavede i første del skulle kun koncentrere sig om at finde ud af, om der var en løve, en tiger eller en bjørn på billedet
-* Den behøvede ikke overveje, hvor realistisk det billede var - Den del var lidt overladt til den, der leverede billedet
-* Når vi bygger en generativ model, så skal vi ikke bare bekymre os om, hvad der skal være på billedet, men vi skal også bekymre os om, hvorvidt det er realistisk
-* Sagt med andre ord, så skal vi kun skabe ting, som med alt sandsynlighed ville være opstået i virkeligheden
-* En model, der genererer grønne tigere eller skaldede løver ville ikke vinde mange point
-* Vi venter dog lidt med at kigge på modeller, der skaber billeder
+* Det er ikke helt nok til at skabe nye og originale værker, men de lægger faktisk grundstenen til, hvordan man kan gøre det
 * I den her del kigger vi nemlig på at skabe tekst
 * Det er ofte lidt mere tilgængeligt, men samtidig også meget sjovt at computeren generere plausible fortællinger
+* Vi så i første del modellen tage et billede ind og så gætte på et af tre ord - løve, tiger eller bjørn
+* Hvis vi nu ændrer input, så den tager noget tekst ind i stedet for et billede, og så lader den gætte på alle ord i en ordbog, så har vi faktisk muligheden for at lave en model, der kan skabe tekst
 * Men der er også praktiske anvendelser ved det
 * Når vi skaber ny tekst, så er det faktisk de samme teknikker, som chatbots, autocomplete og oversættere som Google Translate anvender
 * De er efterhånden så gode, at vi ikke altid opdager, at vi taler med en chatbot i starten, når vi skriver med kundeservice på en hjemmeside
@@ -83,7 +78,11 @@ Del 2
 * Nå... Men tilbage til vores egne eksempler
 * Vi skal jo lige først finde ud af, hvordan en model egentlig kan skabe tekst
 * Fordelen med tekst er, at det er en lang streng af ord - det kan vi udnytte
-* Så når modellen skal skabe tekst, så ser den på, hvad vi har indtil nu, og så gætter den på hvad det næste ord skal være
+* Hvis vi har en række ord, så kan vi gætte på det næste ord, sætte det på i halen af den tekst vi allerede har, og så ender vi med en række ord der er et ord længere
+* Og det er faktisk kernen i tekstgenerering
+  0. Gætter på et ord
+  0. Indsætter vores gæt
+  0. Starter forfra igen fra punkt 1
 * Men hvordan gætter den egentlig?
 * En computer gætter på bogstaver på samme måde som den gætter på alt andet
 * Den lærer hvor sandsynligt hvert tegn er, og så trækker den et tilfældigt ord med den sandsynlighed
@@ -103,34 +102,56 @@ Del 2
 * Samtidig ved vi også, hvad forskellige typer af ord bruges til
 * Så hvis vi er ved at læse noget, så ved vi, at vi skal kigge efter et navneord, hvis vi vil vide, hvad det er der snakkes om
 * Den del skal vi give en computer mulighed for at lære
-* For at give en forståelse af det, bygger vi op gennem tre modeller fra simpel til kompliceret
 * Den allersimpleste form for hukommelse er, hvor computeren husker de sidste par ord, og så bruger det til at gætte det næste
 * Så hvis den er sat til at huske de sidste fire ord, så vi den glemme det første ord, når den læser et nyt
 * For at træne modellen skal den bare tælle op, hvilke ord den har set efter alle kombinationer af fire ord og hvor mange gange
 * Når det er gjort kan vi bede den om at begynde at skrive tekst
 * -- Markov DEMO --
-* Nu begynder vi at lægge nye måder ind, hvor modellen kan huske og hvor den skal kigge, men grundideen er altid det samme
-* 1. Læse en masse tekst
-  2. Finde ud af hvilke ord der kommer efter og hvor ofte
-  3. Starte fra et tomt startsted
-  4. På skifte læse den tekst der er genereret og indsætte et nyt ord
-
-* Som det næste kan vi lege med hvor langt tilbage i teksten modellen skal kunne huske
-* Vi kan skrue på den ved håndkraft, men for lang hukommelse vil betyde, at den bare gentager den tekst, som den oprindeligt læste
-* For kort så husker den ikke hvad den selv skrev og laver noget nonsens
-* Det er kort sagt noget bøvl selv at skulle finde
-* Hvis vi derimod gør det til en del af træningen, at den selv skal lære, hvor meget den skal huske og glemme, så kan vi skabe en smartere model
-* Lad os tage et kig på, hvad det er for nogle svagheder, der er i vores model
-* For det første vil den altid have en begrænset og unuanceret hukommelse
-* Enten husker den et ord eller også glemmer den det - Den har ingen chance for at variere, hvor lang tilbage den skal huske
-* Derudover tror den altid, at det sidste ord er det vigtigste - Den har med andre ord ikke mulighed for at søge tilbage i sætningen, ligesom vi mennesker gør det
-* Vores store udfordring i at løse det her er at vi arbejder med ord - Det er computere bare ikke særlig gode til, de vil hellere have tal
-* Hvis vi 
-
-
-Del 2
------
-GPT-2 (demo: https://talktotransformer.com/)
+* Det giver faktisk nogle helt fornuftige resultater, hvis man får sat størrelsen af hukommelsen rigtig
+* Det minder bare ikke særlig meget om den måde vi mennesker forstår tekst på
+* Vi er meget mere komplicerede
+* Som mennesker har vi en indbygget evne til at huske ting, som vi har læst langt tilbage i teksten
+* Samtidig er vi også i stand til at glemme de ubetydelige dele af en tekst
+* Hvis vi bliver spurgt om, hvad det 17. ord i en bog er, så er det de færreste af os, der kan svare
+* Men hvis vi bliver spurgt om, hvem der er hovedpersoner, så er det ofte ret let
+* Det er fordi, at vi er trænet til at trække de vigtigste oplysninger ud af en tekst gennem hele vores sprogforståelse
+* Og vi bruger faktisk rigtig mange forskellige elementer her, som vi kan drage inspiration fra, når vi designer en model
+* Som det første kan vi huske hvad der er sket gennem det meste af teksten, men vi husker bedst det sidste, der er sket
+* Det kommer af, at vi har en forståelse for, at det nyeste er det vigtigste for det, vi skal til at læse
+* I computersprog komprimerer vi mentalt hele teksten til en meget lille mængde information, der indeholder de vigtigste oplysninger
+* Vi vil ikke kunne genskabe hele teksten ord for ord, men vi har trukket det essentielle ud af teksten og ville kunne skrive en tekst med samme budskab
+* Det var på mange måder det, vi lærte modellen i første del
+* Den var i stand til at trække det vigtigste information ud af et billede og omforme det til et gæt
+* På samme måde kan vi bruge en model til at trække det vigtigste information ud af en tekst
+* Det giver bare to nye problemer
+  1. Sådan nogle modeller er generelt ikke glade for, når man ikke ved, hvor mange oplysninger der skal håndteres - Billederne var alle en fast størrelse, men vi har ikke nogen måde at vide, hvor lang en tekst er. Det betyder, at vi ikke kan lære modellen, hvor vigtigt det femte sidste ord er. For vi ved ikke, om der er fem ord i sætningen
+  2. Det kan være næsten umuligt for modellen at lære på egen hånd, hvad der er vigtigt i sætningen
+* Vores redning bliver at gætter på et ord, indsætter det og starter forfra med den nye tekst
+* Det gør nemlig, at vi kan snyde lidt
+* Når vi første gang har indsat et ord, så har vi jo kun et enkelt nyt ord
+* Det betyder samtidig, at alt det hårde arbejde, som vi har gjort for at trække de vigtigste ud af alt den foregående tekst, det har vi allerede gjort
+* Hvis vi husker på det fra skridt til skridt, så skal vi bare lære modellen, hvordan den skal opdatere sin viden baseret på et enkelt nyt ord
+* Samtidig kan vi også give modellen mulighed for at lære, hvornår den skal glemme noget af det, der tidligere er læst
+* Med andre ord kommer vi nærmere og nærmere en god model
+* Herefter er det et spørgsmål om at udsætte den for en masse tekst, så den kan lære, hvordan den trækker mening ud af tekst - ligesom da vi viste modellen i første del en masse billeder af tigre, løver og bjørne, så den kunne lære at trække det vigtige viden ud af den del
+* Indtil for et par år siden var det måden at bygge en model på
+* Men der mangler stadig en del, som vi mennesker er gode til
+* Vi har lært, hvilke dele af en sætning, der er vigtige afhængigt af, hvor vi er
+* Det kan vores model her ikke
+* Når vi opdaterer vores viden med et nyt ord, glemmer vi med det samme hvordan vores viden så ud før det nye ord
+* Det kan nogle gange bringe os i uføre, da modellen kan glemme navne og lignende ting - den ved simpelthen ikke, at den skal kigge tilbage efter det, men forsøger bare at gætte et ord ud fra den totale forståelse af teksten
+* Men hvad nu hvis vi gemmer på vores forståelse af teksten som den så ud efter hvert ord?
+* Så kan vi tilføje endnu et lag til vores model, hvor den ikke bare lærer at gætte et ord ud fra hvad den kan huske, men samtidig også lærer den hvor i sætningen den skal kigge
+* Efterhånden har vi ret meget kompliceret model - faktisk er den nu så kompliceret, at de store og mest kraftfulde modeller af slagsen indeholder over 1,5 milliard parametre den kan skrue på
+* Hvis du nu lige nu sidder og tænker - hvad er det nu lige en parameter er, så er det de tal, hvor modellen gemmer sin viden
+* Det er de tal, der bestemmer hvordan en model opfører sig
+* Som eksempel har en ret linje to parametre - hældning og skæringspunkt
+* Den her model har mere end 1,5 milliarder
+* Det gør også, at den tager temmelig meget data at træne
+* Faktisk brugte forskerne teksten fra omkring 8 millioner hjemmesider, som modellen tyggede sig igennem
+* Skal vi tage et kig på, hvad den kan?
+* -- DEMO : Talk to transformer (https://talktotransformer.com) + Magic Generator (https://minimaxir.com/apps/gpt2-mtg/) --
+* Vi tager lige en lille pause mere, og så kigger vi på, hvordan man kan bruge modellerne til at skabe billeder
 
 Del 3
 -----
