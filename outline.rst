@@ -155,7 +155,74 @@ Del 2
 
 Del 3
 -----
-Neural Style Transfer
-GAN
-Name drop StyleGAN
-DeOldefy
+* Velkommen tilbage til sidste del - nu skal vi til at se på, hvordan man kan skabe billeder
+* Der er i virkeligheden flere forskellige teknikker, men vi dykker ned i to styk her til aften
+* Den første er Neural Style Transfer
+* Det er en teknik, hvor man anvender neurale netværk til at overføre stilen af et billede til et andet
+* Når vi taler om at overføre stilen fra et billede, så er det farvevalget og måden stregerne i billedet flyder på
+* Hvis vi fører det over på et andet billede, så beholder vi indholdet, f.eks. en løve fra det andet billede, men tegner det i samme stil som det første
+* Det lyder som lidt af en mundfuld, men faktisk har vi allerede været igennem en stor del af det
+* Neurale netværk er en type modeller og det er faktisk dem, vi har brugt til at identificere billeder og også til at generere tekst med den komplicerede af modellerne
+* Det smarte ved de her Neural Style Transfer er, at dem er lavede det indså, at en model der skal identificere et billede, både skal forstå indhold og stil
+* Det skal ligesom vide, at noget med striber højst sandsynligt er en tiger, selv om der er mange store kattedyr
+* Samtidig skal det også kunne se, at en grøn løve nok ikke er voldsomt realistisk
+* For os betyder det, at vi faktisk har gjort det tunge arbejde med modellen, da vi trænede den i første del af foredraget
+* Hvis man har sådan en model, så kan vi kigge ind under kølerhjelmen og finde de steder, hvor den koder både stil og indhold
+* Det betyder, at vi nu kan starte med at lave gæt på nye billeder, og så se hvordan den klarer sig på de to parametre
+* Vi kan med andre ord skabe et nyt billede, tage det billede, plus de to vi skal mikse, og smide igennem vores billedgenkendelsesmodel
+* Så får vores gættede billede en samlet karakter for, hvor tæt indhold matcher indholdsbilledet og hvor tæt stil matcher stilbilledet
+* I del 1 ville vi så gå tilbage og ændre i modellen for at gøre den bedre til at gætte
+* Her ændrer vi i vores gættede billede i stedet
+* Teknikken er den samme - Vi får en karakter, ser hvordan vi ændrer det for at forbedre vores karakter og gætter igen
+* På den måde kan vi skabe en blanding af to billeder
+* Samtidig kan vi skrue på vægten af de to dele i karakteren for at vægte, om det er vigtigst at ramme indhold eller stil
+* Lad os lige tage et kig på et par eksempler
+* -- DEMO: Neural Style Transfer --
+* Godt så... Vi er kommet en del nærmere at computere opfører sig kreativt, men der er lige en teknik mere, som jeg vil vise jer
+* Den hører til blandt mine absolute favoritter og det skyldes især, at måden man træner modellen her på er lidt som at lege politi og røvere med machine learning modeller
+* Metoden hedder Generative Adversarial Networks eller GAN
+* Det går i alt sin enkelthed ud på, at man har to modeller
+* Den ene har rollen som vores forbryder. Dens job er at skabe falsk data, f.eks. falske billeder
+* Den anden model er så vores politimand. Den har til opgave at identificere, hvilket noget data der er ægte og hvilket data der er falsk
+* I starten er ingen af dem særlig dygtige og det minder mest af alt om en gang Gøg og Gokke
+* Forfalsker modellen spytter mere eller mindre bare støj ud, så politimodellen skal ikke være særlig dygtig for at kende forskel
+* Men undervejs lærer forfalskeren, hvilke falske data der kan slippe igennem og forbedrer sig
+* Det betyder at politimodellen får et hak i trynen for ikke at være god nok
+* Men samtidig betyder det også, at den nu har en bedre kvalitet data til rådighed til at træne sig til at kende forskel på ægte og falsk
+* Når den så er blevet bedre, så står forfalskermodellen igen med skægget i postkassen, og alt den læring er ikke til megen nytte
+* Heldigvis kan den igen lure af, hvad der nu slipper igennem, og så kører det vilde kapløb mellem de to modeller
+* Politi modellen bliver bedre til at kende forskel på ægte og falsk, hvilket får forfalskeren til at skabe noget, der minder endnu mere om det ægte data
+* Det får så igen politimodellen til at lære at blive bedre til at vide, hvad der er ægte
+* Når de to modeller så på et tidspunkt er trænet færdig, kan vi tage forfalsker modellen og bruge den til at skabe nye ting, som ikke har eksisteret før
+* Det kan man lave mange sjove ting ud af
+* Man kan blandt andet skabe nye ansigter baseret på billeder af kendte som her - ingen af de her mennesker eksisterer i virkeligheden
+* Det kan også bruges til noget mere praktisk
+* F.eks. kan man bruge det til at fjerne de elementer fra et kamerabillede, som ikke er relevante
+* Hvis man nu vil træne en bil til at køre selv, men kun har mulighed for at træne den i en simulation som MarioKart, så kan man tage nogle billeder fra virkeligheden og bedre forfalsker modellen omdanne dem så det ligner noget for MarioKart
+* På den måde får man en nem og billig måde til at træne en model til at køre bil, som ikke bliver forvirret, når den kommer ud og ser alle husene og reklamerne i virkeligheden
+* Det kræver bare at man har optaget noget video på et kamera, så forfalskeren har noget input data, men ellers kan man klare det hele på sin computer, hvilket er en del billigere
+* Inden I går ud og forsøger det her, så tænk lige på, at noget af det modellen lærer at sortere fra er cyklister og fodgængere
+* De eksisterer ikke i MarioKart, men det er ret vigtigt ikke at ramme dem ude i trafikken, så der skal noget ekstra til for at håndtere dem
+* Her til sidst vil jeg lige vise jer et andet eksempel fra et projekt, der hedder DeOldify
+* De har trænet en model til at farvelægge sort/hvid billeder
+* Her bruger de forfalsker modellen til at farvelægge et sort/hvid billede og så skal politimodellen kende forskel på et farvelagt billede og et der oprindeligt var i farver
+* Lad mig lige vise jer et eksempel på, hvordan det virker
+-- DEMO: DEOldify --
+* Det var en så det sidste eksempel i dag
+* Jeg håber, at det har givet en introduktion til, hvordan vi kan få computere til at skabe tekst og billeder
+* Ofte er det sværeste i det at lure, hvordan man kan anvende en model på en sjov måde
+* Det er faktisk ofte udfordringen, når vi arbejder med machine learning
+* Som I har set, så kan modellerne godt skabe nye ting, men de bliver trænet til at skabe en type data
+* Den samme model kan ikke både skabe tekst og billeder, med mindre den er bygget specifikt til det
+* Samtidig er modellerne også bundet af det data, de er trænet på
+* Hvis I træner en tekstmodel udelukkende på H.C. Andersens eventyr, så lærer den aldrig nogensinde at skrive i samme sprog som vi bruger på sociale medier
+* Den tror alle tekster starter med Der var engang...
+* Det er på samme måder med billedmodellerne
+* De kender kun de ting, de er trænet på og for dem er det alt hvad der er i verden
+* I har måske kunnet fornemme, at det faktisk ikke er så svært at lege med den slags modeller
+* Så længe at vi ikke skal bygge dem selv, så kan man hurtigt komme i gang med at lege med dem og få nogle gode resultater
+* De her slides bliver lagt op på UNFs hjemmeside og på sidste slide kan I finde links til alle de ting, jeg viste i aften - Så kan I bare tage fat og lege, og forhåbentlig skabe noget fuldstændig fantastisk
+* Her er der ikke andet tilbage end at sige tak for i aften
+* Tak fordi I var med på den her lidt alternative foredragsform
+* Jeg håber, at I har nydt det
+* Hvis I har nogle spørgsmål, så skriv dem i kommentarfeltet. Jeg bliver hængende her, så der er rigeligt tid til at få skrevet noget
